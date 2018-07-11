@@ -9,7 +9,7 @@ class ThirdPageState extends State<ThirdPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
+      /*appBar: new AppBar(
         title: new Text(
             '我的',
           style: new TextStyle(
@@ -17,7 +17,7 @@ class ThirdPageState extends State<ThirdPage> {
           ),
         ),
         centerTitle: true,
-      ),
+      ),*/
       body: new Center(
         child: new Text('我的'),
       ),

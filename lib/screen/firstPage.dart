@@ -9,7 +9,7 @@ class FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
+      /*appBar: new AppBar(
         title: new Text(
           '首页',
           style: new TextStyle(
@@ -17,7 +17,7 @@ class FirstPageState extends State<FirstPage> {
           ),
         ),
         centerTitle: true
-      ),
+      ),*/
       body: new Center(
         child: new Text('首页'),
       ),
