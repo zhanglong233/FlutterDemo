@@ -10,10 +10,16 @@ class FirstPageState extends State<FirstPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('界面一'),
+        title: new Text(
+          '首页',
+          style: new TextStyle(
+              color: Colors.white
+          ),
+        ),
+        centerTitle: true
       ),
       body: new Center(
-        child: new Text('这是第一个界面'),
+        child: new Text('首页'),
       ),
     );
   }

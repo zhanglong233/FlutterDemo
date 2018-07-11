@@ -12,10 +12,16 @@ class SecondPageState extends State<SecondPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('界面二'),
+        title: new Text(
+            '消息',
+            style: new TextStyle(
+              color: Colors.white
+            )
+        ),
+        centerTitle: true,
       ),
       body: new Center(
-        child: new Text('这是第二个界面'),
+        child: new Text('消息'),
       ),
     );
   }
