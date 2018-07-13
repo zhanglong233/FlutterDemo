@@ -10,11 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      //退到后台时显示的标题
       title: 'Flutter Demo',
       theme: new ThemeData(
         //primarySwatch: Colors.blue,
         brightness: Brightness.light,
-        primaryColor: Colors.green,
+        primaryColor: const Color(0xff1296db),
         accentColor: Colors.deepOrangeAccent
       ),
       home: new MyHomePage(),
@@ -30,25 +31,104 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   PageController pageController;
-  int page = 0;
+  int _tabIndex  = 0;//tab角标
+  var tabBottomImages;//底部导航栏图标
+  var tabBottomTitles;//底部导航栏标题
+  var _bodys;//底部导航对应的页面
+  var _titles;//底部导航对应的页面标题
+
+  /*
+   * 根据image路径获取图片
+   * 这个图片的路径需要在 pubspec.yaml 中去定义
+   */
+  Image getTabBottomImageSource(path){
+    return new Image.asset(path,width: 25.0,height: 25.0);
+  }
+
+  /*
+   * 根据索引获得对应的normal或是select的icon
+   */
+  Image getTabBottomIcon(int curIndex){
+    if (curIndex == _tabIndex){
+      return tabBottomImages[curIndex][1];
+    }
+    return tabBottomImages[curIndex][0];
+  }
+
+  /*
+   * 获取bottomTab的颜色和文字
+   */
+  Text getTabBottomTitle(int curIndex){
+    if (curIndex == _tabIndex){
+      return new Text(tabBottomTitles[curIndex],
+        style: new TextStyle(color: const Color(0xff1296db))
+      );
+    }
+    return new Text(tabBottomTitles[curIndex],
+      style: new TextStyle(color: const Color(0xff8a8a8a))
+    );
+  }
+
+  /*
+  *  获取bottomTab对应的页面标题
+  */
+  Text getPageTitle(int curIndex){
+    if(curIndex == _tabIndex){
+      return new Text(_titles[curIndex],
+        style: new TextStyle(color: Colors.white),
+      );
+    }
+    return null;
+  }
+
+  /*
+   * 初始化底部导航栏参数
+   */
+  void initData(){
+    tabBottomImages = [
+      [
+        getTabBottomImageSource('images/icon_bottom_home_normal.png'),
+        getTabBottomImageSource('images/icon_bottom_home_select.png')
+      ],
+      [
+        getTabBottomImageSource('images/icon_bottom_message_normal.png'),
+        getTabBottomImageSource('images/icon_bottom_message_select.png')
+      ],
+      [
+        getTabBottomImageSource('images/icon_bottom_persion_normal.png'),
+        getTabBottomImageSource('images/icon_bottom_persion_select.png')
+      ],
+    ];
+    tabBottomTitles = [
+      '首页','消息','我的'
+    ];
+    _bodys = [
+      new FirstPage(),
+      new SecondPage(),
+      new ThirdPage()
+    ];
+    _titles = [
+      '首页','消息','我的'
+    ];
+  }
+
+
+
 
   @override
   void initState() {
     super.initState();
-    pageController = new PageController(initialPage: this.page);
   }
 
   @override
   Widget build(BuildContext context) {
+    //调用初始化数据方法
+    initData();
+
     return new Scaffold(
       backgroundColor: Colors.green,
       appBar: new AppBar(
-        title: new Text(
-            '首页',
-          style: new TextStyle(
-            color: Colors.white
-          ),
-        ),
+        title: getPageTitle(_tabIndex),
         centerTitle: true,
       ),
       drawer: new Drawer(
@@ -70,93 +150,41 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: new PageView(
-        children: <Widget>[
-          new FirstPage(),
-          new SecondPage(),
-          new ThirdPage()
-        ],
-        controller: pageController,
-        onPageChanged: onPageChanged,
-      ),
+      body: _bodys[_tabIndex],
       bottomNavigationBar: new BottomNavigationBar(
         items: [
           new BottomNavigationBarItem(
               //backgroundColor: Colors.green,
-              icon: new Icon(
-                Icons.home,
-                color: Colors.green,
-              ),
-              title: new Text(
-                  '首页',
-                style: new TextStyle(
-                  color: Colors.green
-                ),
-              )),
+              icon: getTabBottomIcon(0),
+              title: getTabBottomTitle(0)
+          ),
           new BottomNavigationBarItem(
-              icon: new Icon(
-                Icons.message,
-                color: Colors.green,
-              ),
-              title: new Text(
-                '消息',
-                style: new TextStyle(
-                    color: Colors.green
-                ),
-              )),
+              icon: getTabBottomIcon(1),
+              title: getTabBottomTitle(1)
+          ),
           new BottomNavigationBarItem(
-              icon: new Icon(
-                Icons.cloud,
-                color: Colors.green,
-              ),
-              title: new Text(
-                '我的',
-                style: new TextStyle(
-                    color: Colors.green
-                ),
-              )),
+              icon: getTabBottomIcon(2),
+              title: getTabBottomTitle(2)
+          )
         ],
-        type: BottomNavigationBarType.shifting,
+        //设置显示的模式shifting/fixed
+        type: BottomNavigationBarType.fixed,
+        //tabBottom的点击监听
         onTap: onTap,
-        currentIndex: page,
+        //设置当前索引
+        currentIndex: _tabIndex,
       ),
     );
   }
 
   void onTap(int index){
-    pageController.animateToPage(
-        index,
-        duration: new Duration(milliseconds: 300),
-        curve: Curves.ease);
-  }
-
-  void onPageChanged(int page){
-    this.setState((){
-      this.page = page;
+    setState(() {
+      _tabIndex = index;
     });
   }
 
 }
 
-
-class BottomNavItem extends StatelessWidget {
-  const BottomNavItem({
-    Key key,
-    this.color: const Color(0xFF2DBD3A),
-    this.child,
-  }) : super(key: key);
-
-  final Color color;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      color: color,
-      child: child,
-    );
-  }
-}
 
 
 /*class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{

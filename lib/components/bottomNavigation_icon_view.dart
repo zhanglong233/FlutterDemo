@@ -1,3 +1,7 @@
+/**
+ *  底部导航栏样式封装
+ * */
+
 import 'package:flutter/material.dart';
 
 class BottomNavigationIconView {
